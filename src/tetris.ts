@@ -21,37 +21,27 @@ function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, 
 
   // draw field
   field.map((i, j, value) => {
-    if (!value) {
-      return;
-    }
     // draw cell
     context.fillStyle = value;
     context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-  })
+  }, v => !!v)
 
   // draw next tetrimino    
   context.fillStyle = next.type.colour;
 
-  map2d(next.type.cells, (tI, tJ, value) => {
-    if (!value) {
-      return;
-    }
-
+  next.type.cells.map((tI, tJ) => {
     const i = next.position.i + tI;
     const j = next.position.j + tJ;
 
     // draw cell
     context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-  });
+  }, v => !!v);
 }
 
 function hasTetriminoLanded(next: RealTetrimino, field: Grid<string>) {
   let collision = false;
 
-  map2d(next.type.cells, (tI, tJ, value) => {
-    if (!value) {
-      return;
-    }
+  next.type.cells.map((tI, tJ) => {
     const {i, j} = next.position;
 
     // +1 for next row
@@ -60,10 +50,9 @@ function hasTetriminoLanded(next: RealTetrimino, field: Grid<string>) {
 
     if (!field.cells[i2] || field.cells[i2][j2]) {
       collision = true;
-
       // TODO: break
     }
-  })
+  }, v => !!v)
 
   return collision;
 }
@@ -75,15 +64,6 @@ function spawnTetronimo() {
       j: 3,
     },
     type: tetriminoes[randomInt(tetriminoes.length)]
-  }
-}
-
-// TODO: move this somewhere; does it belong on Grid class?
-function map2d(array2d: number[][], callbackFn: (i: number, j: number, value: number) => void) {
-  for (let i = 0; i < array2d.length; i++) {
-    for (let j = 0; j < array2d[0].length; j++) {
-      callbackFn(i, j, array2d[i][j]);
-    }
   }
 }
 
@@ -107,16 +87,12 @@ export default function setupTetris(domId: string) {
       // landed
 
       // 1. add to field
-      map2d(next.type.cells, (tI, tJ, value) => {
-        if (!value) {
-          return;
-        }
-
+      next.type.cells.map((tI, tJ) => {
         const i = next.position.i + tI;
         const j = next.position.j + tJ;
 
         field.cells[i][j] = next.type.colour;
-      })
+      }, v => !!v);
 
       // 2. spawn new tetrimino
       next = spawnTetronimo();
