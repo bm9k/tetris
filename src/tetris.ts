@@ -66,14 +66,16 @@ function hasTetrominoCollided(next: RealTetromino, field: Grid<string>) {
   return collision;
 }
 
-function spawnTetronimo(): RealTetromino {
+function spawnTetronimo(field: Grid<string>): RealTetromino {
+  const type = tetrominoes[randomInt(tetrominoes.length)];
+
   return {
     position: {
       i: -1,
-      j: 3,
+      j: Math.floor((field.columns - type.cells.columns) / 2)
     },
     rotation: 0,
-    type: tetrominoes[randomInt(tetrominoes.length)]
+    type
   }
 }
 
@@ -138,7 +140,7 @@ export default function setupTetris(domId: string) {
   canvas.width = cellSize * field.columns;
   canvas.height = cellSize * field.rows;
 
-  let next = spawnTetronimo();
+  let next = spawnTetronimo(field);
 
   const redraw = () => {
     draw(field, canvas, cellSize, next);
@@ -161,7 +163,7 @@ export default function setupTetris(domId: string) {
       }
 
       // 2. spawn new tetromino
-      next = spawnTetronimo();
+      next = spawnTetronimo(field);
     }
   }, 500);
 

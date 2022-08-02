@@ -30,6 +30,7 @@ Tetris game in vanilla TS & HTML5 canvas ✨
       - [x] Can't rotate out of field
       - [x] Must not rotate into another piece
       - [x] Kicks off wall/other pieces
+    - [x] Always spawn in middle (deviating left if exact middle not possible)
     - [ ] Acceleration
   - [ ] Clear completed lines
   - [ ] Game over check (when tetromino can't enter field)
