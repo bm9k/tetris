@@ -25,10 +25,11 @@ Tetris game in vanilla TS & HTML5 canvas ✨
       - [x] Must stay within field
       - [x] Must not move over another piece
       - [x] Bind to keyboard
-    - [ ] Rotation
+    - [x] Rotation
       - [x] Basic functionality
-      - [ ] Can't rotate out of field
-      - [ ] Must not rotate into another piece
+      - [x] Can't rotate out of field
+      - [x] Must not rotate into another piece
+      - [ ] Kicks off wall/other pieces
     - [ ] Acceleration
   - [ ] Clear completed lines
   - [ ] Game over check (when tetromino can't enter field)

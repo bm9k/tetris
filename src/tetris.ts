@@ -156,7 +156,11 @@ export default function setupTetris(domId: string) {
 
   hotkeys("up", event => {
     event.preventDefault();
-    next = rotateRight(next);
+    const potentialNext = rotateRight(next);
+
+    if (!hasTetrominoCollided(potentialNext, field)) {
+      next = potentialNext
+    }
     redraw();
   });
 
