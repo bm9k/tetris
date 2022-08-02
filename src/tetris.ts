@@ -2,7 +2,7 @@ import hotkeys from "hotkeys-js";
 
 import { tetrominoes, Tetromino, generateRightRotation as rotateCellsRight, getKickOffsets } from "./data/tetromino";
 import Grid from "./grid";
-import {Position2D, Direction, addPositions, directionDeltas} from "./position";
+import { Position2D, Direction, addPositions, directionDeltas } from "./position";
 
 function randomInt(n: number) {
   return Math.floor(Math.random() * n);
@@ -94,10 +94,10 @@ function move(field: Grid<string>, next: RealTetromino, direction: Direction) {
 }
 
 function rotateRight(tetromino: RealTetromino, field: Grid<string>) {
-  const {rows} = tetromino.type.cells;
+  const { rows } = tetromino.type.cells;
 
   if (rows === 2) {
-      return tetromino
+    return tetromino
   }
 
   const oldRotation = tetromino.rotation;
@@ -116,7 +116,7 @@ function rotateRight(tetromino: RealTetromino, field: Grid<string>) {
   for (const [dI, dJ] of offsetTests) {
     const kickedTetromino = {
       ...rotatedTetromino,
-      position: addPositions(tetromino.position, {i: dI, j: dJ})
+      position: addPositions(tetromino.position, { i: dI, j: dJ })
     };
 
     if (!hasTetrominoCollided(kickedTetromino, field)) {
