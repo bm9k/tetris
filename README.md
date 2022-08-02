@@ -15,9 +15,9 @@ Tetris game in vanilla JS & HTML5 canvas ✨
     - [x] One
       - [x] Randomly generate
       - [x] Collide with field boundary
-    - [ ] Multiple
+    - [x] Multiple
       - [x] Randomly generate
-      - [ ] Collide with pieces/field boundary
+      - [x] Collide with pieces/field boundary
     - [ ] Lateral movement
     - [ ] Rotation
     - [ ] Acceleration

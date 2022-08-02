@@ -46,11 +46,26 @@ function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, 
 }
 
 function hasTetriminoLanded(next: RealTetrimino, field: Grid<string>) {
-  const lastRow = field.rows;
-  const tetriminoHeight = next.type.cells.length;
+  let collision = false;
 
-  return lastRow === next.position.i + tetriminoHeight;
+  map2d(next.type.cells, (tI, tJ, value) => {
+    if (!value) {
+      return;
+    }
+    const {i, j} = next.position;
 
+    // +1 for next row
+    const i2 = i + 1 + tI;
+    const j2 = j + tJ;
+
+    if (!field.cells[i2] || field.cells[i2][j2]) {
+      collision = true;
+
+      // TODO: break
+    }
+  })
+
+  return collision;
 }
 
 function spawnTetronimo() {
