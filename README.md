@@ -10,7 +10,7 @@ Tetris game in vanilla TS & HTML5 canvas ✨
 - [x] Setup basic grid & add randomly colour cells
 - [x] Structure
   - [x] Rewrite Grid.map as an iterator
-  - [ ] Encapsulate game logic into class
+  - [x] Encapsulate game logic into class
 - [ ] Functionality
   - [ ] Falling tetrominoes
     - [x] One
