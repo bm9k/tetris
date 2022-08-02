@@ -8,6 +8,8 @@ Tetris game in vanilla JS & HTML5 canvas ✨
 
 ## TODO
 - [x] Setup basic grid & add randomly colour cells
+- [ ] Structure
+  - [ ] Rewrite Grid.map as an iterator
 - [ ] Functionality
   - [ ] Falling tetriminoes
     - [ ] One
