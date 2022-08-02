@@ -1,6 +1,6 @@
 # [WIP] Tetris
 
-Tetris game in vanilla JS & HTML5 canvas ✨
+Tetris game in vanilla TS & HTML5 canvas ✨
 
 🚨 🚧 This project is currently a work-in-progress 🚧 🚨
 

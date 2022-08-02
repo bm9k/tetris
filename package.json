@@ -1,7 +1,7 @@
 {
   "author": "Ben Martin",
   "name": "tetris",
-  "description": "Tetris game in vanilla JS & HTML5 canvas ✨",
+  "description": "Tetris game in vanilla TS & HTML5 canvas ✨",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
