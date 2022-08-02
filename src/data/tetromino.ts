@@ -90,3 +90,52 @@ export function generateRightRotation(tetromino: Tetromino) {
 
     return rotatedCells;
 }
+
+// Kick offsets for right rotations
+// see https://tetris.fandom.com/wiki/SRS#Wall_Kicks
+
+// t3KickOffsets[i] contains the 5 tests for the ith right rotation (i * 90 deg right)
+// each test is [x,y] offset to try
+// TODO: make this wording clearer
+
+const size3KickOffsets = [
+    [
+        [0, 0], [-1, 0], [-1, 1], [0, -2], [-1, -2]
+    ],
+    [
+        [0, 0], [1, 0], [1, -1], [0, 2], [1, 2]
+    ],
+    [
+        [0, 0], [1, 0], [1, 1], [0, -2], [1, -2]
+    ],
+    [
+        [0, 0], [-1, 0], [-1, -1], [0, 2], [-1, 2]
+    ],
+]
+
+const size4KickOffsets = [
+    [
+        [0, 0], [-2, 0], [1, 0], [-2, -1], [1, 2]
+    ],
+    [
+        [0, 0], [-1, 0], [2, 0], [-1, 2], [2, -1]
+    ],
+    [
+        [0, 0], [2, 0], [-1, 0], [2, 1], [-1, -2]
+    ],
+    [
+        [0, 0], [1, 0], [-2, 0], [1, -2], [-2, 1]
+    ],
+]
+
+// TODO: restrict this type?
+export function getKickOffsets(size: number) {
+    switch (size) {
+        case 3:
+            return size3KickOffsets;
+        case 4:
+            return size4KickOffsets;
+        default:
+            throw new Error(`No offsets defined for size ${size}`)
+    }
+}
