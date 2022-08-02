@@ -12,7 +12,7 @@ Tetris game in vanilla TS & HTML5 canvas ✨
   - [x] Rewrite Grid.map as an iterator
   - [ ] Encapsulate game logic into class
 - [ ] Functionality
-  - [ ] Falling tetriminoes
+  - [ ] Falling tetrominoes
     - [x] One
       - [x] Randomly generate
       - [x] Collide with field boundary
@@ -28,8 +28,8 @@ Tetris game in vanilla TS & HTML5 canvas ✨
     - [ ] Rotation
     - [ ] Acceleration
   - [ ] Clear completed lines
-  - [ ] Game over check (when tetrimino can't enter field)
-  - [ ] Preview next tetrimino
+  - [ ] Game over check (when tetromino can't enter field)
+  - [ ] Preview next tetromino
   - [ ] Levels of increasing speed
   - [ ] Scoring based upon number of lines clear & acceleration
   - [ ] Stats

@@ -1,4 +1,4 @@
-import { tetriminoes, Tetrimino } from "./data/tetrimino";
+import { tetrominoes, Tetromino } from "./data/tetromino";
 import Grid from "./grid";
 import hotkeys from "hotkeys-js";
 
@@ -11,12 +11,12 @@ interface Position2D {
   j: number
 }
 
-interface RealTetrimino {
+interface RealTetromino {
   position: Position2D
-  type: Tetrimino
+  type: Tetromino
 }
 
-function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, next: RealTetrimino) {
+function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, next: RealTetromino) {
   const context = canvas.getContext("2d")!;
   context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -27,7 +27,7 @@ function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, 
     context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
   }
 
-  // draw next tetrimino    
+  // draw next tetromino
   context.fillStyle = next.type.colour;
 
   for (const [tI, tJ] of next.type.cells.keys(v => !!v)) {
@@ -39,7 +39,7 @@ function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, 
   }
 }
 
-function hasTetriminoCollided(next: RealTetrimino, field: Grid<string>) {
+function hasTetrominoCollided(next: RealTetromino, field: Grid<string>) {
   let collision = false;
 
   for (const [tI, tJ] of next.type.cells.keys(v => !!v)) {
@@ -74,7 +74,7 @@ function spawnTetronimo() {
       i: -1,
       j: 3,
     },
-    type: tetriminoes[randomInt(tetriminoes.length)]
+    type: tetrominoes[randomInt(tetrominoes.length)]
   }
 }
 
@@ -99,11 +99,11 @@ function addPositions(a: Position2D, b: Position2D) {
   }
 }
 
-function move(field: Grid<string>, next: RealTetrimino, direction: Direction) {
+function move(field: Grid<string>, next: RealTetromino, direction: Direction) {
   const delta = directionDeltas[direction];
 
   const potentialPosition = addPositions(next.position, delta)
-  const canMove = !hasTetriminoCollided({
+  const canMove = !hasTetrominoCollided({
     ...next,
     position: potentialPosition
   }, field)
@@ -146,7 +146,7 @@ export default function setupTetris(domId: string) {
         field.cells[i][j] = next.type.colour;
       }
 
-      // 2. spawn new tetrimino
+      // 2. spawn new tetromino
       next = spawnTetronimo();
     }
   }, 500);

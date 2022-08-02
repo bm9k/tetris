@@ -1,6 +1,6 @@
 import Grid, { from2dArray } from "../grid"
 
-const tetriminoConfigs = [
+const tetrominoConfigs = [
     {
         colour: "gold",
         cells: [
@@ -52,12 +52,12 @@ const tetriminoConfigs = [
     
   ]
 
-export interface Tetrimino {
+export interface Tetromino {
   colour: string,
   cells: Grid<number>
 }
 
-export const tetriminoes: Tetrimino[] = tetriminoConfigs.map(({cells, ...config}) => {
+export const tetrominoes: Tetromino[] = tetrominoConfigs.map(({cells, ...config}) => {
     return {
         ...config,
         cells: from2dArray(cells)
