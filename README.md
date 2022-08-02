@@ -19,12 +19,12 @@ Tetris game in vanilla JS & HTML5 canvas ✨
     - [x] Multiple
       - [x] Randomly generate
       - [x] Collide with pieces/field boundary
-    - [ ] Lateral movement
+    - [x] Lateral movement
       - [x] Basic functionality (with simple button)
       - [x] Redraw after moving
       - [x] Must stay within field
       - [x] Must not move over another piece
-      - [ ] Bind to keyboard
+      - [x] Bind to keyboard
     - [ ] Rotation
     - [ ] Acceleration
   - [ ] Clear completed lines

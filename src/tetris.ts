@@ -1,5 +1,6 @@
 import { tetriminoes, Tetrimino } from "./data/tetrimino";
 import Grid from "./grid";
+import hotkeys from "hotkeys-js";
 
 function randomInt(n: number) {
   return Math.floor(Math.random() * n);
@@ -150,17 +151,16 @@ export default function setupTetris(domId: string) {
     }
   }, 500);
 
-  // WIP temporary control buttons
-  const moveLeftBtn = document.getElementById("move-left")!;
-  const moveRightBtn = document.getElementById("move-right")!;
-
-  moveLeftBtn.addEventListener('click', () => {
-    move(field, next, Direction.Left)
+  hotkeys("left", event => {
+    event.preventDefault();
+    move(field, next, Direction.Left);
     redraw();
-  })
-  moveRightBtn.addEventListener('click', () => {
+  });
+
+  hotkeys("right", event => {
+    event.preventDefault();
     move(field, next, Direction.Right);
     redraw();
-  })
+  });
 
 }
