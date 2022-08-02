@@ -1,3 +1,4 @@
-import './style.css'
+import "./style.css";
+import setupTetris from "./tetris";
 
-alert("Hello tetris!")
+setupTetris("tetris");

@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  height: 100%;
+}
+
+#app {
+  width: calc(100% - 2em);
+  height: calc(100% - 2em);
+  margin: 2em;
+  text-align: center;
+}
+
+#tetris {
+  background: #eee;
+  margin: 0 auto;
+  display: inline-block;
+}
