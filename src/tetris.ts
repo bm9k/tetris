@@ -1,14 +1,11 @@
-import { tetrominoes, Tetromino } from "./data/tetromino";
-import Grid from "./grid";
 import hotkeys from "hotkeys-js";
+
+import { tetrominoes, Tetromino, generateRightRotation as rotateCellsRight } from "./data/tetromino";
+import Grid from "./grid";
+import {Position2D, Direction, addPositions, directionDeltas} from "./position";
 
 function randomInt(n: number) {
   return Math.floor(Math.random() * n);
-}
-
-interface Position2D {
-  i: number,
-  j: number
 }
 
 interface RealTetromino {
@@ -68,34 +65,13 @@ function hasTetrominoCollided(next: RealTetromino, field: Grid<string>) {
   return collision;
 }
 
-function spawnTetronimo() {
+function spawnTetronimo(): RealTetromino {
   return {
     position: {
       i: -1,
       j: 3,
     },
     type: tetrominoes[randomInt(tetrominoes.length)]
-  }
-}
-
-enum Direction {
-  Up,
-  Down,
-  Left,
-  Right
-}
-
-const directionDeltas = {
-  [Direction.Up]: { i: -1, j: 0 },
-  [Direction.Down]: { i: 1, j: 0 },
-  [Direction.Left]: { i: 0, j: -1 },
-  [Direction.Right]: { i: 0, j: 1 },
-}
-
-function addPositions(a: Position2D, b: Position2D) {
-  return {
-    i: a.i + b.i,
-    j: a.j + b.j
   }
 }
 
@@ -113,6 +89,21 @@ function move(field: Grid<string>, next: RealTetromino, direction: Direction) {
   }
 
   return canMove;
+}
+
+function rotateRight(tetromino: RealTetromino) {
+
+  if (tetromino.type.cells.rows === 2) {
+      return tetromino
+  }
+
+  return {
+    ...tetromino,
+    type: {
+      ...tetromino.type,
+      cells: rotateCellsRight(tetromino.type)
+    }
+  }
 }
 
 export default function setupTetris(domId: string) {
@@ -160,6 +151,12 @@ export default function setupTetris(domId: string) {
   hotkeys("right", event => {
     event.preventDefault();
     move(field, next, Direction.Right);
+    redraw();
+  });
+
+  hotkeys("up", event => {
+    event.preventDefault();
+    next = rotateRight(next);
     redraw();
   });
 
