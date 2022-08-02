@@ -12,9 +12,9 @@ Tetris game in vanilla JS & HTML5 canvas ✨
   - [ ] Rewrite Grid.map as an iterator
 - [ ] Functionality
   - [ ] Falling tetriminoes
-    - [ ] One
-      - [ ] Randomly generate
-      - [ ] Collide with field boundary
+    - [x] One
+      - [x] Randomly generate
+      - [x] Collide with field boundary
     - [ ] Multiple
       - [ ] Randomly generate
       - [ ] Collide with pieces/field boundary
