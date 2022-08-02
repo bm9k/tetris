@@ -15,20 +15,30 @@ interface RealTetrimino {
   type: Tetrimino
 }
 
-function draw(grid: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, next: RealTetrimino) {
+function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, next: RealTetrimino) {
   const context = canvas.getContext("2d")!;
   context.clearRect(0, 0, canvas.width, canvas.height);
+
+  // draw field
+  field.map((i, j, value) => {
+    if (!value) {
+      return;
+    }
+    // draw cell
+    context.fillStyle = value;
+    context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+  })
 
   // draw next tetrimino    
   context.fillStyle = next.type.colour;
 
   map2d(next.type.cells, (tI, tJ, value) => {
-    const i = next.position.i + tI;
-    const j = next.position.j + tJ;
-
     if (!value) {
       return;
     }
+
+    const i = next.position.i + tI;
+    const j = next.position.j + tJ;
 
     // draw cell
     context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
@@ -71,13 +81,30 @@ export default function setupTetris(domId: string) {
   canvas.width = cellSize * field.columns;
   canvas.height = cellSize * field.rows;
 
-  const next = spawnTetronimo();
+  let next = spawnTetronimo();
 
   setInterval(() => {
     draw(field, canvas, cellSize, next);
 
     if (!hasTetriminoLanded(next, field)) {
       next.position.i += 1;
+    } else {
+      // landed
+
+      // 1. add to field
+      map2d(next.type.cells, (tI, tJ, value) => {
+        if (!value) {
+          return;
+        }
+
+        const i = next.position.i + tI;
+        const j = next.position.j + tJ;
+
+        field.cells[i][j] = next.type.colour;
+      })
+
+      // 2. spawn new tetrimino
+      next = spawnTetronimo();
     }
   }, 500);
 
