@@ -1,6 +1,6 @@
 import hotkeys from "hotkeys-js";
 
-import { tetrominoes, Tetromino, generateRightRotation as rotateCellsRight } from "./data/tetromino";
+import { tetrominoes, Tetromino, generateRightRotation as rotateCellsRight, getKickOffsets } from "./data/tetromino";
 import Grid from "./grid";
 import {Position2D, Direction, addPositions, directionDeltas} from "./position";
 
@@ -10,6 +10,7 @@ function randomInt(n: number) {
 
 interface RealTetromino {
   position: Position2D
+  rotation: number,  // 0 <= number <= 3
   type: Tetromino
 }
 
@@ -71,6 +72,7 @@ function spawnTetronimo(): RealTetromino {
       i: -1,
       j: 3,
     },
+    rotation: 0,
     type: tetrominoes[randomInt(tetrominoes.length)]
   }
 }
@@ -91,19 +93,40 @@ function move(field: Grid<string>, next: RealTetromino, direction: Direction) {
   return canMove;
 }
 
-function rotateRight(tetromino: RealTetromino) {
+function rotateRight(tetromino: RealTetromino, field: Grid<string>) {
+  const {rows} = tetromino.type.cells;
 
-  if (tetromino.type.cells.rows === 2) {
+  if (rows === 2) {
       return tetromino
   }
 
-  return {
+  const oldRotation = tetromino.rotation;
+
+  const rotatedTetromino = {
     ...tetromino,
+    rotation: (oldRotation + 1) % 4,
     type: {
       ...tetromino.type,
       cells: rotateCellsRight(tetromino.type)
     }
+  };
+
+  const offsetTests = getKickOffsets(rows)[oldRotation];
+
+  for (const [dI, dJ] of offsetTests) {
+    const kickedTetromino = {
+      ...rotatedTetromino,
+      position: addPositions(tetromino.position, {i: dI, j: dJ})
+    };
+
+    if (!hasTetrominoCollided(kickedTetromino, field)) {
+      // rotation accepted
+      return kickedTetromino;
+    }
   }
+
+  // rotation rejected
+  return tetromino;
 }
 
 export default function setupTetris(domId: string) {
@@ -156,7 +179,7 @@ export default function setupTetris(domId: string) {
 
   hotkeys("up", event => {
     event.preventDefault();
-    const potentialNext = rotateRight(next);
+    const potentialNext = rotateRight(next, field);
 
     if (!hasTetrominoCollided(potentialNext, field)) {
       next = potentialNext
