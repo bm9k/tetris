@@ -20,28 +20,28 @@ function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, 
   context.clearRect(0, 0, canvas.width, canvas.height);
 
   // draw field
-  field.map((i, j, value) => {
+  for (const [i, j, value] of field.entries(v => !!v)) {
     // draw cell
     context.fillStyle = value;
     context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-  }, v => !!v)
+  }
 
   // draw next tetrimino    
   context.fillStyle = next.type.colour;
 
-  next.type.cells.map((tI, tJ) => {
+  for (const [tI, tJ] of next.type.cells.keys(v => !!v)) {
     const i = next.position.i + tI;
     const j = next.position.j + tJ;
 
     // draw cell
     context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-  }, v => !!v);
+  }
 }
 
 function hasTetriminoLanded(next: RealTetrimino, field: Grid<string>) {
   let collision = false;
 
-  next.type.cells.map((tI, tJ) => {
+  for (const [tI, tJ] of next.type.cells.keys(v => !!v)) {
     const {i, j} = next.position;
 
     // +1 for next row
@@ -50,9 +50,9 @@ function hasTetriminoLanded(next: RealTetrimino, field: Grid<string>) {
 
     if (!field.cells[i2] || field.cells[i2][j2]) {
       collision = true;
-      // TODO: break
+      break;
     }
-  }, v => !!v)
+  }
 
   return collision;
 }
@@ -87,12 +87,12 @@ export default function setupTetris(domId: string) {
       // landed
 
       // 1. add to field
-      next.type.cells.map((tI, tJ) => {
+      for (const [tI, tJ] of next.type.cells.keys(v => !!v)) {
         const i = next.position.i + tI;
         const j = next.position.j + tJ;
 
         field.cells[i][j] = next.type.colour;
-      }, v => !!v);
+      }
 
       // 2. spawn new tetrimino
       next = spawnTetronimo();

@@ -13,15 +13,26 @@ export default class Grid<Type> {
     });
   }
 
-  // TODO: replace this with iterator?
-  map(callbackFn: (row: number, column: number, value: Type) => void, filterFn?: (value: Type) => boolean) {
+  *keys(filterFn?: (value: Type) => boolean): Generator<[number, number]> {
     for (let i = 0; i < this.rows; i++) {
       for (let j = 0; j < this.columns; j++) {
         const value = this.cells[i][j];
         if (filterFn && !filterFn(value)) {
           continue;
         }
-        callbackFn(i, j, value);
+        yield [i, j];
+      }
+    }
+  }
+
+  *entries(filterFn?: (value: Type) => boolean): Generator<[number, number, Type]> {
+    for (let i = 0; i < this.rows; i++) {
+      for (let j = 0; j < this.columns; j++) {
+        const value = this.cells[i][j];
+        if (filterFn && !filterFn(value)) {
+          continue;
+        }
+        yield [i, j, value];
       }
     }
   }
@@ -36,9 +47,9 @@ export function from2dArray<Type>(array2d: Type[][]): Grid<Type> {
 
   const grid = new Grid(rows, columns, initialValue);
 
-  grid.map((row, column) => {
+  for (const [row, column] of grid.keys()) {
     grid.cells[row][column] = array2d[row][column];
-  })
+  }
 
   return grid;
 }
