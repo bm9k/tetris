@@ -125,8 +125,12 @@ export default function setupTetris(domId: string) {
 
   let next = spawnTetronimo();
 
-  setInterval(() => {
+  const redraw = () => {
     draw(field, canvas, cellSize, next);
+  }
+
+  setInterval(() => {
+    redraw();
 
     const moved = move(field, next, Direction.Down);
 
@@ -150,7 +154,13 @@ export default function setupTetris(domId: string) {
   const moveLeftBtn = document.getElementById("move-left")!;
   const moveRightBtn = document.getElementById("move-right")!;
 
-  moveLeftBtn.addEventListener('click', () => move(field, next, Direction.Left))
-  moveRightBtn.addEventListener('click', () => move(field, next, Direction.Right))
+  moveLeftBtn.addEventListener('click', () => {
+    move(field, next, Direction.Left)
+    redraw();
+  })
+  moveRightBtn.addEventListener('click', () => {
+    move(field, next, Direction.Right);
+    redraw();
+  })
 
 }

@@ -21,7 +21,7 @@ Tetris game in vanilla JS & HTML5 canvas ✨
       - [x] Collide with pieces/field boundary
     - [ ] Lateral movement
       - [x] Basic functionality (with simple button)
-      - [ ] Redraw after moving
+      - [x] Redraw after moving
       - [x] Must stay within field
       - [x] Must not move over another piece
       - [ ] Bind to keyboard
