@@ -1,6 +1,6 @@
 import hotkeys from "hotkeys-js";
 
-import { tetrominoes, Tetromino, generateRightRotation as rotateCellsRight, getKickOffsets } from "./data/tetromino";
+import { tetrominoes, Tetromino, generateRightRotation as rotateCellsRight, getKickOffsets } from "./tetromino";
 import Grid from "./grid";
 import { Position2D, Direction, addPositions, directionDeltas } from "./position";
 
@@ -28,7 +28,7 @@ function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, 
   // draw next tetromino
   context.fillStyle = next.type.colour;
 
-  for (const [tI, tJ] of next.type.cells.keys(v => !!v)) {
+  for (const [tI, tJ] of next.type.shape.keys(v => !!v)) {
     const i = next.position.i + tI;
     const j = next.position.j + tJ;
 
@@ -40,7 +40,7 @@ function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, 
 function hasTetrominoCollided(next: RealTetromino, field: Grid<string>) {
   let collision = false;
 
-  for (const [tI, tJ] of next.type.cells.keys(v => !!v)) {
+  for (const [tI, tJ] of next.type.shape.keys(v => !!v)) {
     const { i, j } = next.position;
 
     const i2 = i + tI;
@@ -72,7 +72,7 @@ function spawnTetronimo(field: Grid<string>): RealTetromino {
   return {
     position: {
       i: -1,
-      j: Math.floor((field.columns - type.cells.columns) / 2)
+      j: Math.floor((field.columns - type.shape.columns) / 2)
     },
     rotation: 0,
     type
@@ -96,7 +96,7 @@ function move(field: Grid<string>, next: RealTetromino, direction: Direction) {
 }
 
 function rotateRight(tetromino: RealTetromino, field: Grid<string>) {
-  const { rows } = tetromino.type.cells;
+  const { rows } = tetromino.type.shape;
 
   if (rows === 2) {
     return tetromino
@@ -155,7 +155,7 @@ export default function setupTetris(domId: string) {
       // landed
 
       // 1. add to field
-      for (const [tI, tJ] of next.type.cells.keys(v => !!v)) {
+      for (const [tI, tJ] of next.type.shape.keys(v => !!v)) {
         const i = next.position.i + tI;
         const j = next.position.j + tJ;
 

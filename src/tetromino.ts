@@ -1,17 +1,17 @@
-import Grid, { from2dArray } from "../grid"
-import { rotateCoordinateRight } from "../position"
+import Grid, { from2dArray } from "./grid"
+import { rotateCoordinateRight } from "./position"
 
 const tetrominoConfigs = [
     {
         colour: "gold",
-        cells: [
+        shape: [
             [1, 1],
             [1, 1]
         ]
     },
     {
         colour: "green",
-        cells: [
+        shape: [
             [0, 1, 1],
             [1, 1, 0],
             [0, 0, 0]
@@ -19,7 +19,7 @@ const tetrominoConfigs = [
     },
     {
         colour: "red",
-        cells: [
+        shape: [
             [1, 1, 0],
             [0, 1, 1],
             [0, 0, 0]
@@ -27,7 +27,7 @@ const tetrominoConfigs = [
     },
     {
         colour: "orange",
-        cells: [
+        shape: [
             [1, 1, 1],
             [1, 0, 0],
             [0, 0, 0]
@@ -35,7 +35,7 @@ const tetrominoConfigs = [
     },
     {
         colour: "blue",
-        cells: [
+        shape: [
             [1, 1, 1],
             [0, 0, 1],
             [0, 0, 0]
@@ -43,7 +43,7 @@ const tetrominoConfigs = [
     },
     {
         colour: "purple",
-        cells: [
+        shape: [
             [1, 1, 1],
             [0, 1, 0],
             [0, 0, 0]
@@ -51,7 +51,7 @@ const tetrominoConfigs = [
     },
     {
         colour: "teal",
-        cells: [
+        shape: [
             [0, 0, 0, 0],
             [1, 1, 1, 1],
             [0, 0, 0, 0],
@@ -63,32 +63,32 @@ const tetrominoConfigs = [
 
 export interface Tetromino {
     colour: string,
-    cells: Grid<number>
+    shape: Grid<number>
 }
 
-export const tetrominoes: Tetromino[] = tetrominoConfigs.map(({ cells, ...config }) => {
+export const tetrominoes: Tetromino[] = tetrominoConfigs.map(({ shape, ...config }) => {
     return {
         ...config,
-        cells: from2dArray(cells)
+        shape: from2dArray(shape)
     }
 })
 
 export function generateRightRotation(tetromino: Tetromino) {
-    const { rows, columns } = tetromino.cells;
+    const { rows, columns } = tetromino.shape;
 
     if (rows !== columns) {
         throw new Error("Tetromino geometries must be represented as a square 2d matrix")
     }
 
-    const rotatedCells = new Grid(rows, rows, 0);
+    const rotatedShape = new Grid(rows, rows, 0);
 
-    for (const [i, j, value] of tetromino.cells.entries()) {
+    for (const [i, j, value] of tetromino.shape.entries()) {
         const { i: i2, j: j2 } = rotateCoordinateRight({ i, j }, rows);
 
-        rotatedCells.cells[i2][j2] = value;
+        rotatedShape.cells[i2][j2] = value;
     }
 
-    return rotatedCells;
+    return rotatedShape;
 }
 
 // Kick offsets for right rotations
