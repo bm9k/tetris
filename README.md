@@ -10,6 +10,7 @@ Tetris game in vanilla JS & HTML5 canvas ✨
 - [x] Setup basic grid & add randomly colour cells
 - [x] Structure
   - [x] Rewrite Grid.map as an iterator
+  - [ ] Encapsulate game logic into class
 - [ ] Functionality
   - [ ] Falling tetriminoes
     - [x] One
@@ -19,6 +20,11 @@ Tetris game in vanilla JS & HTML5 canvas ✨
       - [x] Randomly generate
       - [x] Collide with pieces/field boundary
     - [ ] Lateral movement
+      - [x] Basic functionality (with simple button)
+      - [ ] Redraw after moving
+      - [x] Must stay within field
+      - [x] Must not move over another piece
+      - [ ] Bind to keyboard
     - [ ] Rotation
     - [ ] Acceleration
   - [ ] Clear completed lines
