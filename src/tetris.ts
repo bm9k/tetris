@@ -14,12 +14,130 @@ interface RealTetromino {
   type: Tetromino
 }
 
-function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, next: RealTetromino) {
+interface GridConfig {
+  rows: number,
+  columns: number
+}
+
+class Field {
+  readonly grid: Grid<string>
+
+  constructor({ rows, columns }: GridConfig) {
+    this.grid = new Grid(rows, columns, '');
+  }
+
+  hasTetrominoCollided(next: RealTetromino) {
+    let collision = false;
+
+    for (const [tI, tJ] of next.type.shape.keys(v => !!v)) {
+      const { i, j } = next.position;
+
+      const i2 = i + tI;
+      const j2 = j + tJ;
+
+      const validRow = 0 <= i2 && i2 < this.grid.rows;
+      const validColumn = 0 <= j2 && j2 < this.grid.columns;
+
+      // out of bounds
+      if (!validRow || !validColumn) {
+        collision = true;
+
+        break;
+      }
+
+      // collides with another piece
+      if (this.grid.cells[i2][j2]) {
+        collision = true;
+        break;
+      }
+    }
+
+    return collision;
+  }
+
+  spawnTetronimo(): RealTetromino {
+    const type = tetrominoes[randomInt(tetrominoes.length)];
+
+    return {
+      position: {
+        i: -1,
+        j: Math.floor((this.grid.columns - type.shape.columns) / 2)
+      },
+      rotation: 0,
+      type
+    }
+  }
+
+  move(next: RealTetromino, direction: Direction) {
+    const delta = directionDeltas[direction];
+
+    const potentialPosition = addPositions(next.position, delta)
+    const canMove = !this.hasTetrominoCollided({
+      ...next,
+      position: potentialPosition
+    })
+
+    // TODO: make this return a copy somehow
+    if (canMove) {
+      next.position = potentialPosition;
+    }
+
+    return canMove;
+  }
+
+  rotateRight(tetromino: RealTetromino): RealTetromino {
+    const { rows } = tetromino.type.shape;
+
+    if (rows === 2) {
+      return tetromino
+    }
+
+    const oldRotation = tetromino.rotation;
+
+    const rotatedTetromino = {
+      ...tetromino,
+      rotation: (oldRotation + 1) % 4,
+      type: {
+        ...tetromino.type,
+        shape: rotateCellsRight(tetromino.type)
+      }
+    };
+
+    const offsetTests = getKickOffsets(rows)[oldRotation];
+
+    for (const [dI, dJ] of offsetTests) {
+      const kickedTetromino = {
+        ...rotatedTetromino,
+        position: addPositions(tetromino.position, { i: dI, j: dJ })
+      };
+
+      if (!this.hasTetrominoCollided(kickedTetromino)) {
+        // rotation accepted
+        return kickedTetromino;
+      }
+    }
+
+    // rotation rejected
+    return tetromino;
+  }
+}
+
+class Game {
+  readonly field: Field;
+
+  constructor({ rows, columns }: GridConfig) {
+    this.field = new Field({ rows, columns });
+  }
+
+}
+
+// TODO: encapsulate UI
+function draw(field: Field, canvas: HTMLCanvasElement, cellSize: number, next: RealTetromino) {
   const context = canvas.getContext("2d")!;
   context.clearRect(0, 0, canvas.width, canvas.height);
 
   // draw field
-  for (const [i, j, value] of field.entries(v => !!v)) {
+  for (const [i, j, value] of field.grid.entries(v => !!v)) {
     // draw cell
     context.fillStyle = value;
     context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
@@ -37,110 +155,22 @@ function draw(field: Grid<string>, canvas: HTMLCanvasElement, cellSize: number, 
   }
 }
 
-function hasTetrominoCollided(next: RealTetromino, field: Grid<string>) {
-  let collision = false;
-
-  for (const [tI, tJ] of next.type.shape.keys(v => !!v)) {
-    const { i, j } = next.position;
-
-    const i2 = i + tI;
-    const j2 = j + tJ;
-
-    const validRow = 0 <= i2 && i2 < field.rows;
-    const validColumn = 0 <= j2 && j2 < field.columns;
-
-    // out of bounds
-    if (!validRow || !validColumn) {
-      collision = true;
-
-      break;
-    }
-
-    // collides with another piece
-    if (field.cells[i2][j2]) {
-      collision = true;
-      break;
-    }
-  }
-
-  return collision;
-}
-
-function spawnTetronimo(field: Grid<string>): RealTetromino {
-  const type = tetrominoes[randomInt(tetrominoes.length)];
-
-  return {
-    position: {
-      i: -1,
-      j: Math.floor((field.columns - type.shape.columns) / 2)
-    },
-    rotation: 0,
-    type
-  }
-}
-
-function move(field: Grid<string>, next: RealTetromino, direction: Direction) {
-  const delta = directionDeltas[direction];
-
-  const potentialPosition = addPositions(next.position, delta)
-  const canMove = !hasTetrominoCollided({
-    ...next,
-    position: potentialPosition
-  }, field)
-
-  if (canMove) {
-    next.position = potentialPosition;
-  }
-
-  return canMove;
-}
-
-function rotateRight(tetromino: RealTetromino, field: Grid<string>) {
-  const { rows } = tetromino.type.shape;
-
-  if (rows === 2) {
-    return tetromino
-  }
-
-  const oldRotation = tetromino.rotation;
-
-  const rotatedTetromino = {
-    ...tetromino,
-    rotation: (oldRotation + 1) % 4,
-    type: {
-      ...tetromino.type,
-      cells: rotateCellsRight(tetromino.type)
-    }
-  };
-
-  const offsetTests = getKickOffsets(rows)[oldRotation];
-
-  for (const [dI, dJ] of offsetTests) {
-    const kickedTetromino = {
-      ...rotatedTetromino,
-      position: addPositions(tetromino.position, { i: dI, j: dJ })
-    };
-
-    if (!hasTetrominoCollided(kickedTetromino, field)) {
-      // rotation accepted
-      return kickedTetromino;
-    }
-  }
-
-  // rotation rejected
-  return tetromino;
-}
 
 export default function setupTetris(domId: string) {
   const cellSize = 40;
 
-  const field = new Grid(20, 10, '');
+  const game = new Game({
+    rows: 20,
+    columns: 10
+  })
+
+  const field = game.field;
   const canvas = document.getElementById(domId) as HTMLCanvasElement;
 
-  canvas.width = cellSize * field.columns;
-  canvas.height = cellSize * field.rows;
+  canvas.width = cellSize * field.grid.columns;
+  canvas.height = cellSize * field.grid.rows;
 
-  let next = spawnTetronimo(field);
+  let next = game.field.spawnTetronimo();
 
   const redraw = () => {
     draw(field, canvas, cellSize, next);
@@ -149,7 +179,7 @@ export default function setupTetris(domId: string) {
   setInterval(() => {
     redraw();
 
-    const moved = move(field, next, Direction.Down);
+    const moved = game.field.move(next, Direction.Down);
 
     if (!moved) {
       // landed
@@ -159,31 +189,31 @@ export default function setupTetris(domId: string) {
         const i = next.position.i + tI;
         const j = next.position.j + tJ;
 
-        field.cells[i][j] = next.type.colour;
+        field.grid.cells[i][j] = next.type.colour;
       }
 
       // 2. spawn new tetromino
-      next = spawnTetronimo(field);
+      next = field.spawnTetronimo();
     }
   }, 500);
 
   hotkeys("left", event => {
     event.preventDefault();
-    move(field, next, Direction.Left);
+    field.move(next, Direction.Left);
     redraw();
   });
 
   hotkeys("right", event => {
     event.preventDefault();
-    move(field, next, Direction.Right);
+    field.move(next, Direction.Right);
     redraw();
   });
 
   hotkeys("up", event => {
     event.preventDefault();
-    const potentialNext = rotateRight(next, field);
+    const potentialNext = field.rotateRight(next);
 
-    if (!hasTetrominoCollided(potentialNext, field)) {
+    if (!field.hasTetrominoCollided(potentialNext)) {
       next = potentialNext
     }
     redraw();
