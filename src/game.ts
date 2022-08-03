@@ -160,5 +160,35 @@ export class Game {
     }
   }
 
+  hardDrop() {
+    // 1. find closest lock position
+    // start from di = 1, 2, ... until the position isn't valid, then subtract 1
+    let dI;
+    for (dI = 1; dI < this.field.grid.rows; dI++) {
+      const potential = {
+        ...this.next,
+        position: addPositions(this.next.position, { i: dI, j: 0 })
+      }
+
+      const collided = this.field.hasTetrominoCollided(potential);
+
+      if (collided) {
+        dI--;
+        break;
+      }
+    }
+
+    if (dI === 0) {
+      return;
+    }
+
+    // 2. move the tetromino there
+    this.next = {
+      ...this.next,
+      position: addPositions(this.next.position, { i: dI, j: 0 })
+    }
+
+  }
+
 
 }

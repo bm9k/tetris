@@ -57,7 +57,8 @@ export default function setupTetris(domId: string) {
     ["left", () => game.attemptMove(Direction.Left)],
     ["right", () => game.attemptMove(Direction.Right)],
     ["up", () => game.attemptRotateRight()],
-    ["down", () => game.attemptMove(Direction.Down)]
+    ["down", () => game.attemptMove(Direction.Down)],
+    ["space", () => game.hardDrop()],
   ]);
 
   for (const [shortcut, actionFn] of keyboardActions.entries()) {
