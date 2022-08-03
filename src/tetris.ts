@@ -29,8 +29,8 @@ export default function setupTetris(domId: string) {
 
   // const canvas = document.getElementById(domId) as HTMLCanvasElement;
 
-  canvas.width = cellSize * game.field.grid.columns;
-  canvas.height = cellSize * game.field.grid.rows;
+  canvas.width = cellSize * game.field.columns;
+  canvas.height = cellSize * game.field.rows;
 
   previewCanvas.width = cellSize * previewSize.columns;
   previewCanvas.height = cellSize * previewSize.rows;

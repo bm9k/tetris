@@ -14,11 +14,9 @@ export interface GridConfig {
   columns: number
 }
 
-export class Field {
-  readonly grid: Grid<string>
-
+export class Field extends Grid<string> {
   constructor({ rows, columns }: GridConfig) {
-    this.grid = new Grid(rows, columns, '');
+    super(rows, columns, "");
   }
 
   hasTetrominoCollided(next: RealTetromino) {
@@ -30,8 +28,8 @@ export class Field {
       const i2 = i + tI;
       const j2 = j + tJ;
 
-      const validRow = 0 <= i2 && i2 < this.grid.rows;
-      const validColumn = 0 <= j2 && j2 < this.grid.columns;
+      const validRow = 0 <= i2 && i2 < this.rows;
+      const validColumn = 0 <= j2 && j2 < this.columns;
 
       // out of bounds
       if (!validRow || !validColumn) {
@@ -41,7 +39,7 @@ export class Field {
       }
 
       // collides with another piece
-      if (this.grid.cells[i2][j2]) {
+      if (this.cells[i2][j2]) {
         collision = true;
         break;
       }
@@ -108,12 +106,12 @@ export class Field {
       const i = tetromino.position.i + tI;
       const j = tetromino.position.j + tJ;
 
-      this.grid.cells[i][j] = tetromino.type.colour;
+      this.cells[i][j] = tetromino.type.colour;
     }
   }
 
   isRowCompleted(rowIndex: number) {
-    for (const cell of this.grid.cells[rowIndex]) {
+    for (const cell of this.cells[rowIndex]) {
       if (!cell) {
         return false;
       }
@@ -125,7 +123,7 @@ export class Field {
   findCompletedRows() {
     const completedRows = [];
 
-    for (let i = this.grid.rows - 1; i >= 0; i--) {
+    for (let i = this.rows - 1; i >= 0; i--) {
       if (this.isRowCompleted(i)) {
         completedRows.push(i);
       }
@@ -140,8 +138,8 @@ export class Field {
 
     // clear rows
     for (const i of completedRows) {
-      for (let j = 0; j < this.grid.columns; j++) {
-        this.grid.cells[i][j] = "";
+      for (let j = 0; j < this.columns; j++) {
+        this.cells[i][j] = "";
       }
     }
 
@@ -153,13 +151,13 @@ export class Field {
     const emptyRows = new Set(completedRows);
     const newRows = [
       // gather completed rows at the top
-      ...[...completedRows.reverse()].map(i => this.grid.cells[i]),
+      ...[...completedRows.reverse()].map(i => this.cells[i]),
       // gather other rows at the bottom
-      ...this.grid.cells.filter((_, i) => !emptyRows.has(i)),
+      ...this.cells.filter((_, i) => !emptyRows.has(i)),
     ];
 
     for (const [i, row] of newRows.entries()) {
-      this.grid.cells[i] = row;
+      this.cells[i] = row;
     }
 
     return true;
@@ -197,7 +195,7 @@ export class Game {
     this.next = {
       position: {
         i: -1,
-        j: Math.floor((this.field.grid.columns - type.shape.columns) / 2)
+        j: Math.floor((this.field.columns - type.shape.columns) / 2)
       },
       rotation: 0,
       type
@@ -264,7 +262,7 @@ export class Game {
     // start from di = 1, 2, ... until the position isn't valid, then subtract 1
     let dI;
     // +1 accounts for tetrominoes spawning at i=-1
-    for (dI = 1; dI < this.field.grid.rows + 1; dI++) {
+    for (dI = 1; dI < this.field.rows + 1; dI++) {
       const potential = {
         ...this.next,
         position: addPositions(this.next.position, { i: dI, j: 0 })

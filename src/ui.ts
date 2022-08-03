@@ -32,7 +32,7 @@ export function draw(game: Game, canvas: HTMLCanvasElement, previewCanvas: HTMLC
   holdContext.clearRect(0, 0, holdCanvas.width, holdCanvas.height);
 
   // draw field
-  for (const [i, j, value] of field.grid.entries(v => !!v)) {
+  for (const [i, j, value] of field.entries(v => !!v)) {
     drawBlock(context, { i, j }, value, cellSize);
   }
 
