@@ -1,9 +1,7 @@
 export default class Grid<Type> {
-  readonly rows: number;
-  readonly columns: number;
   cells: Type[][];
 
-  constructor(rows: number, columns: number, initialValue: Type) {
+  constructor(readonly rows: number, readonly columns: number, initialValue: Type) {
     this.rows = rows;
     this.columns = columns;
 
