@@ -150,15 +150,35 @@ export class Field {
     return completedRows;
   }
 
-  clearCompletedRows() {
+  clearCompletedRows(): boolean {
     // identify completed rows
     const completedRows = this.findCompletedRows();
 
+    // clear rows
     for (const i of completedRows) {
       for (let j = 0; j < this.grid.columns; j++) {
         this.grid.cells[i][j] = "";
       }
     }
+
+    if (!completedRows) {
+      return false;
+    }
+
+    // drop field down
+    const emptyRows = new Set(completedRows);
+    const newRows = [
+      // gather completed rows at the top
+      ...[...completedRows.reverse()].map(i => this.grid.cells[i]),
+      // gather other rows at the bottom
+      ...this.grid.cells.filter((_, i) => !emptyRows.has(i)),
+    ];
+
+    for (const [i, row] of newRows.entries()) {
+      this.grid.cells[i] = row;
+    }
+
+    return true;
   }
 }
 
