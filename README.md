@@ -42,9 +42,9 @@ Checkout the [live demo](https://bm9k.github.io/tetris)
       - [x] Clear completed lines
       - [x] Drop stack down
   - [ ] Game over check (when tetromino can't enter field)
-  - [ ] Ghost piece
+  - [x] Ghost piece
     - [x] Same as tetromino (when landed)
-    - [ ] Different graphic
+    - [x] Different graphic
   - [ ] Preview next tetromino
     - [ ] Static preview box
     - [ ] Working preview box

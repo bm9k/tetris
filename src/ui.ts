@@ -15,6 +15,9 @@ const BEVEL_COLOURS = [
   RIGHT_BEVEL_COLOUR
 ]
 
+const GHOST_OPACITY = .33;
+const TETROMINO_OPACITY = 1;
+
 
 export function draw(game: Game, canvas: HTMLCanvasElement, cellSize: number) {
   const { field, next } = game;
@@ -28,9 +31,11 @@ export function draw(game: Game, canvas: HTMLCanvasElement, cellSize: number) {
   }
 
   // draw ghost
+  context.globalAlpha = GHOST_OPACITY;
   for (const [i, j] of next.type.shape.keys(v => !!v)) {
     drawBlock(context, addPositions(game.ghostPosition, {i, j}), next.type.colour, cellSize);
   }
+  context.globalAlpha = TETROMINO_OPACITY;
 
   // draw next tetromino
   for (const [i, j] of next.type.shape.keys(v => !!v)) {
