@@ -167,12 +167,13 @@ export class Field {
 }
 
 export class Game {
-  readonly field: Field;
+  field: Field;
   next!: RealTetromino;
   ghostPosition!: Position2D;
   activeHold: (Tetromino | undefined);
   holdAllowed: boolean = true;
   generator: SevenBagGenerator;
+  gameOver: boolean = false;
 
   constructor({ rows, columns }: GridConfig) {
     this.field = new Field({ rows, columns });
@@ -243,11 +244,18 @@ export class Game {
     const moved = this.field.move(this.next, Direction.Down);
 
     if (!moved) {
+
+      if (this.next.position.i === -1) {
+        this.gameOver = true;
+        return;
+      }
+
       // landed
       this.field.affix(this.next);
       this.field.clearCompletedRows();
-      this.spawnTetronimo();
+
       this.holdAllowed = true;
+      this.spawnTetronimo();
     }
   }
 

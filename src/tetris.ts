@@ -6,12 +6,16 @@ import { draw } from "./ui";
 
 
 export default function setupTetris(domId: string) {
-  const cellSize = 40;
+  const cellSize = 40;;
 
-  const game = new Game({
-    rows: 20,
-    columns: 10
-  });
+  const createGame = () => {
+    return new Game({
+      rows: 20,
+      columns: 10
+    })
+  }
+
+  let game: Game = createGame();
 
   const previewSize = {
     rows: 2,
@@ -42,6 +46,11 @@ export default function setupTetris(domId: string) {
     redraw();
 
     game.applyGravity();
+
+    if (game.gameOver) {
+      alert("Game over :(\nPress ok to start a new game");
+      game = createGame();
+    }
   }, 500);
 
   const keyboardActions = new Map([
@@ -51,6 +60,7 @@ export default function setupTetris(domId: string) {
     ["down", () => game.attemptMove(Direction.Down)],
     ["space", () => game.hardDrop()],
     ["shift,h", () => game.attemptHold()],
+    ["n", () => { game = createGame() }],
   ]);
 
   for (const [shortcut, actionFn] of keyboardActions.entries()) {

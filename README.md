@@ -38,10 +38,13 @@ Checkout the [live demo](https://bm9k.github.io/tetris)
       - [x] Soft drop
       - [x] Hard drop
   - [x] Clear completed lines
-      - [x] Triggered when gravity is applied and tetromino can't move down
-      - [x] Clear completed lines
-      - [x] Drop stack down
-  - [ ] Game over check (when tetromino can't enter field)
+    - [x] Triggered when gravity is applied and tetromino can't move down
+    - [x] Clear completed lines
+    - [x] Drop stack down
+  - [ ] Game state
+    - [x] Game over alert
+    - [x] New game
+    - [ ] Pause game
   - [x] Ghost piece
     - [x] Same as tetromino (when landed)
     - [x] Different graphic
