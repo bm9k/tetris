@@ -19,7 +19,7 @@ const GHOST_OPACITY = .33;
 const TETROMINO_OPACITY = 1;
 
 
-export function draw(game: Game, canvas: HTMLCanvasElement, previewCanvas: HTMLCanvasElement, cellSize: number) {
+export function draw(game: Game, canvas: HTMLCanvasElement, previewCanvas: HTMLCanvasElement, holdCanvas: HTMLCanvasElement, cellSize: number) {
   const { field, next } = game;
 
   const context = canvas.getContext("2d")!;
@@ -27,6 +27,9 @@ export function draw(game: Game, canvas: HTMLCanvasElement, previewCanvas: HTMLC
 
   const previewContext = previewCanvas.getContext("2d")!;
   previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+
+  const holdContext = holdCanvas.getContext("2d")!;
+  holdContext.clearRect(0, 0, holdCanvas.width, holdCanvas.height);
 
   // draw field
   for (const [i, j, value] of field.grid.entries(v => !!v)) {
@@ -49,6 +52,13 @@ export function draw(game: Game, canvas: HTMLCanvasElement, previewCanvas: HTMLC
   const preview = game.previewTetromino()
   for (const [i, j] of preview.shape.keys(v => !!v)) {
     drawBlock(previewContext, addPositions({ i: 0, j: 0 }, { i, j }), preview.colour, cellSize);
+  }
+
+  // draw held piece
+  if (game.activeHold) {
+    for (const [i, j] of game.activeHold.shape.keys(v => !!v)) {
+      drawBlock(holdContext, addPositions({ i: 0, j: 0 }, { i, j }), game.activeHold.colour, cellSize);
+    }
   }
 }
 

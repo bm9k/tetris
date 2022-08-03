@@ -69,6 +69,7 @@ const tetrominoConfigs = [
 ]
 
 export interface Tetromino {
+    key: string,
     colour: string,
     shape: Grid<number>
 }

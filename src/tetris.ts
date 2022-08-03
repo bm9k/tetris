@@ -20,7 +20,8 @@ export default function setupTetris(domId: string) {
 
   const rootElement = document.getElementById(domId)!;
   const canvas = rootElement.querySelector(".field") as HTMLCanvasElement;
-  const previewCanvas = rootElement.querySelector(".preview") as HTMLCanvasElement;
+  const previewCanvas = rootElement.querySelector(".preview canvas") as HTMLCanvasElement;
+  const holdCanvas = rootElement.querySelector(".hold canvas") as HTMLCanvasElement;
 
   // const canvas = document.getElementById(domId) as HTMLCanvasElement;
 
@@ -30,8 +31,11 @@ export default function setupTetris(domId: string) {
   previewCanvas.width = cellSize * previewSize.columns;
   previewCanvas.height = cellSize * previewSize.rows;
 
+  holdCanvas.width = cellSize * previewSize.columns;
+  holdCanvas.height = cellSize * previewSize.rows;
+
   const redraw = () => {
-    draw(game, canvas, previewCanvas, cellSize);
+    draw(game, canvas, previewCanvas, holdCanvas, cellSize);
   }
 
   setInterval(() => {
@@ -46,6 +50,7 @@ export default function setupTetris(domId: string) {
     ["up", () => game.attemptRotateRight()],
     ["down", () => game.attemptMove(Direction.Down)],
     ["space", () => game.hardDrop()],
+    ["shift,h", () => game.attemptHold()],
   ]);
 
   for (const [shortcut, actionFn] of keyboardActions.entries()) {

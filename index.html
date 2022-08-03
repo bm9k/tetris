@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tetris</title>
-  </head>
-  <body>
-    <div id="app">
-      <div id="tetris">
-        <canvas class="preview"></canvas>
-        <canvas class="field"></canvas>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tetris</title>
+</head>
+
+<body>
+  <div id="app">
+    <div id="tetris">
+      <div class="hold">
+        <h3>Hold</h3>
+        <canvas></canvas>
       </div>
-      <div id="controls">
+      <div class="preview">
+        <h3>Next</h3>
+        <canvas></canvas>
+      </div>
+      <canvas class="field"></canvas>
+      <div class="controls">
         <h3>Controls</h3>
         <ul style="display: inline-block; text-align: left">
           <li>Up Arrow: Rotate</li>
           <li>Left/Right Arrow: Move left/right</li>
           <li>Down Arrow: Move down</li>
           <li>Spacebar: Drop instantly</li>
+          <li>H: Hold piece</li>
         </ul>
       </div>
     </div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>

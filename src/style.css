@@ -11,7 +11,38 @@ body {
 }
 
 #tetris {
-  background: #eee;
   margin: 0 auto;
   display: inline-block;
+
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 2em 2em;
+  grid-template-areas:
+    "hold field"
+    "preview field"
+    ". field"
+    "controls field";
+}
+
+.field {
+  grid-area: field;
+}
+
+.hold {
+  grid-area: hold;
+}
+
+.preview {
+  grid-area: preview;
+}
+
+.controls {
+  grid-area: controls
+}
+
+.field,
+.hold,
+.preview {
+  background: #eee;
 }

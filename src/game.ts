@@ -170,6 +170,8 @@ export class Game {
   readonly field: Field;
   next!: RealTetromino;
   ghostPosition!: Position2D;
+  activeHold: (Tetromino | undefined);
+  holdAllowed: boolean = true;
   generator: SevenBagGenerator;
 
   constructor({ rows, columns }: GridConfig) {
@@ -185,8 +187,10 @@ export class Game {
     return tetrominoes.get(key)!;
   }
 
-  spawnTetronimo() {
-    const key = this.generator.take();
+  spawnTetronimo(key?: string) {
+    if (!key) {
+      key = this.generator.take();
+    }
     const type = tetrominoes.get(key)!;
 
     this.next = {
@@ -199,6 +203,22 @@ export class Game {
     }
 
     this.alignGhost();
+  }
+
+  attemptHold(): boolean {
+    if (!this.holdAllowed) {
+      return false;
+    }
+
+    const previousHold = this.activeHold;
+
+    const key = this.next.type.key;
+    this.activeHold = tetrominoes.get(key)!;
+    this.holdAllowed = false;
+
+    this.spawnTetronimo(previousHold?.key);
+
+    return true;
   }
 
   alignGhost() {
@@ -227,6 +247,7 @@ export class Game {
       this.field.affix(this.next);
       this.field.clearCompletedRows();
       this.spawnTetronimo();
+      this.holdAllowed = true;
     }
   }
 

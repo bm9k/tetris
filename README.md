@@ -50,6 +50,12 @@ Checkout the [live demo](https://bm9k.github.io/tetris)
     - [x] Working preview box
   - [x] Random generator
     - [x] 7 bag (see https://tetris.fandom.com/wiki/Random_Generator)
+  - [x] Hold piece
+      - [x] Static hold box
+      - [x] Saves current tetromino
+      - [x] Spawns new piece (if nothing was held)
+      - [x] Resets previously held piece to top (as if newly spawned)
+      - [x] Can't use hold again until piece locks
   - [ ] Load/save
   - [ ] Levels of increasing speed
   - [ ] Scoring based upon number of lines clear & acceleration
