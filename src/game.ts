@@ -180,6 +180,11 @@ export class Game {
     this.spawnTetronimo();
   }
 
+  previewTetromino(): Tetromino {
+    const key = this.generator.peek();
+    return tetrominoes.get(key)!;
+  }
+
   spawnTetronimo() {
     const key = this.generator.take();
     const type = tetrominoes.get(key)!;

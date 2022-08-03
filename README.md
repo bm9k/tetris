@@ -45,9 +45,9 @@ Checkout the [live demo](https://bm9k.github.io/tetris)
   - [x] Ghost piece
     - [x] Same as tetromino (when landed)
     - [x] Different graphic
-  - [ ] Preview next tetromino
-    - [ ] Static preview box
-    - [ ] Working preview box
+  - [x] Preview next tetromino
+    - [x] Static preview box
+    - [x] Working preview box
   - [x] Random generator
     - [x] 7 bag (see https://tetris.fandom.com/wiki/Random_Generator)
   - [ ] Load/save
@@ -63,3 +63,4 @@ Checkout the [live demo](https://bm9k.github.io/tetris)
 - [ ] Formatting (prettier/eslint?)
 - [ ] Graphics
   - [x] Basic bevel
+  - [ ] Layout

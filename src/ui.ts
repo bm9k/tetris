@@ -19,27 +19,36 @@ const GHOST_OPACITY = .33;
 const TETROMINO_OPACITY = 1;
 
 
-export function draw(game: Game, canvas: HTMLCanvasElement, cellSize: number) {
+export function draw(game: Game, canvas: HTMLCanvasElement, previewCanvas: HTMLCanvasElement, cellSize: number) {
   const { field, next } = game;
 
   const context = canvas.getContext("2d")!;
   context.clearRect(0, 0, canvas.width, canvas.height);
 
+  const previewContext = previewCanvas.getContext("2d")!;
+  previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+
   // draw field
   for (const [i, j, value] of field.grid.entries(v => !!v)) {
-    drawBlock(context, {i, j}, value, cellSize);
+    drawBlock(context, { i, j }, value, cellSize);
   }
 
   // draw ghost
   context.globalAlpha = GHOST_OPACITY;
   for (const [i, j] of next.type.shape.keys(v => !!v)) {
-    drawBlock(context, addPositions(game.ghostPosition, {i, j}), next.type.colour, cellSize);
+    drawBlock(context, addPositions(game.ghostPosition, { i, j }), next.type.colour, cellSize);
   }
   context.globalAlpha = TETROMINO_OPACITY;
 
   // draw next tetromino
   for (const [i, j] of next.type.shape.keys(v => !!v)) {
-    drawBlock(context, addPositions(next.position, {i, j}), next.type.colour, cellSize);
+    drawBlock(context, addPositions(next.position, { i, j }), next.type.colour, cellSize);
+  }
+
+  // draw preview
+  const preview = game.previewTetromino()
+  for (const [i, j] of preview.shape.keys(v => !!v)) {
+    drawBlock(previewContext, addPositions({ i: 0, j: 0 }, { i, j }), preview.colour, cellSize);
   }
 }
 

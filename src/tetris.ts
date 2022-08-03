@@ -13,13 +13,25 @@ export default function setupTetris(domId: string) {
     columns: 10
   });
 
-  const canvas = document.getElementById(domId) as HTMLCanvasElement;
+  const previewSize = {
+    rows: 2,
+    columns: 4
+  }
+
+  const rootElement = document.getElementById(domId)!;
+  const canvas = rootElement.querySelector(".field") as HTMLCanvasElement;
+  const previewCanvas = rootElement.querySelector(".preview") as HTMLCanvasElement;
+
+  // const canvas = document.getElementById(domId) as HTMLCanvasElement;
 
   canvas.width = cellSize * game.field.grid.columns;
   canvas.height = cellSize * game.field.grid.rows;
 
+  previewCanvas.width = cellSize * previewSize.columns;
+  previewCanvas.height = cellSize * previewSize.rows;
+
   const redraw = () => {
-    draw(game, canvas, cellSize);
+    draw(game, canvas, previewCanvas, cellSize);
   }
 
   setInterval(() => {
