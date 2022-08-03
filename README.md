@@ -31,7 +31,9 @@ Tetris game in vanilla TS & HTML5 canvas ✨
       - [x] Must not rotate into another piece
       - [x] Kicks off wall/other pieces
     - [x] Always spawn in middle (deviating left if exact middle not possible)
-    - [ ] Acceleration
+    - [ ] Drop (acceleration)
+      - [x] Soft drop
+      - [ ] Hard drop
   - [ ] Clear completed lines
   - [ ] Game over check (when tetromino can't enter field)
   - [ ] Preview next tetromino

@@ -141,14 +141,6 @@ export class Game {
     this.field.move(this.next, direction);
   }
 
-  attemptMoveLeft() {
-    this.attemptMove(Direction.Left)
-  }
-
-  attemptMoveRight() {
-    this.attemptMove(Direction.Right)
-  }
-
   applyGravity() {
     const moved = this.field.move(this.next, Direction.Down);
 

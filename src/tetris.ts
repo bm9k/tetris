@@ -1,6 +1,7 @@
 import hotkeys from "hotkeys-js";
 
 import { Game } from "./game";
+import { Direction } from "./position";
 
 // TODO: encapsulate UI
 function draw(game: Game, canvas: HTMLCanvasElement, cellSize: number) {
@@ -53,9 +54,10 @@ export default function setupTetris(domId: string) {
   }, 500);
 
   const keyboardActions = new Map([
-    ["left", () => game.attemptMoveLeft()],
-    ["right", () => game.attemptMoveRight()],
-    ["up", () => game.attemptRotateRight()]
+    ["left", () => game.attemptMove(Direction.Left)],
+    ["right", () => game.attemptMove(Direction.Right)],
+    ["up", () => game.attemptRotateRight()],
+    ["down", () => game.attemptMove(Direction.Down)]
   ]);
 
   for (const [shortcut, actionFn] of keyboardActions.entries()) {
