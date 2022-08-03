@@ -42,13 +42,22 @@ Checkout the [live demo](https://bm9k.github.io/tetris)
       - [x] Clear completed lines
       - [x] Drop stack down
   - [ ] Game over check (when tetromino can't enter field)
+  - [ ] Ghost piece
+    - [ ] Same as tetromino (when landed)
+    - [ ] Different graphic
   - [ ] Preview next tetromino
+    - [ ] Static preview box
+    - [ ] Working preview box
+  - [ ] Random generator
+    - [ ] 7 bag (see https://tetris.fandom.com/wiki/Random_Generator)
+  - [ ] Load/save
   - [ ] Levels of increasing speed
   - [ ] Scoring based upon number of lines clear & acceleration
   - [ ] Stats
 - [ ] Readme
 - [x] Github pages demo
   - [x] Deploy script
+  - [ ] Favicon
   - [ ] Github banner/corner
   - [ ] Make it look nice
 - [ ] Formatting (prettier/eslint?)
