@@ -12,13 +12,18 @@ function shuffle(array: any[]): void {
   }
 }
 
-export class SevenBagGenerator {
+export interface TetrominoGenerator {
+  peek(): string
+  take(): string
+}
+
+export class SevenBagGenerator implements TetrominoGenerator {
   readonly keys: string[]
   bag: string[]
   next: number
 
-  constructor(keys: string[]) {
-    this.keys = keys;
+  constructor(keys: Iterable<string>) {
+    this.keys = [...keys];
     this.bag = [...keys];
 
     this.next = 0;
