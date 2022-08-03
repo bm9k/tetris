@@ -48,8 +48,8 @@ Checkout the [live demo](https://bm9k.github.io/tetris)
   - [ ] Preview next tetromino
     - [ ] Static preview box
     - [ ] Working preview box
-  - [ ] Random generator
-    - [ ] 7 bag (see https://tetris.fandom.com/wiki/Random_Generator)
+  - [x] Random generator
+    - [x] 7 bag (see https://tetris.fandom.com/wiki/Random_Generator)
   - [ ] Load/save
   - [ ] Levels of increasing speed
   - [ ] Scoring based upon number of lines clear & acceleration

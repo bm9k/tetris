@@ -3,6 +3,7 @@ import { rotateCoordinateRight } from "./position"
 
 const tetrominoConfigs = [
     {
+        key: "O",
         colour: "gold",
         shape: [
             [1, 1],
@@ -10,6 +11,7 @@ const tetrominoConfigs = [
         ]
     },
     {
+        key: "S",
         colour: "green",
         shape: [
             [0, 1, 1],
@@ -18,6 +20,7 @@ const tetrominoConfigs = [
         ]
     },
     {
+        key: "Z",
         colour: "red",
         shape: [
             [1, 1, 0],
@@ -26,6 +29,7 @@ const tetrominoConfigs = [
         ]
     },
     {
+        key: "L",
         colour: "orange",
         shape: [
             [1, 1, 1],
@@ -34,6 +38,7 @@ const tetrominoConfigs = [
         ]
     },
     {
+        key: "J",
         colour: "blue",
         shape: [
             [1, 1, 1],
@@ -42,6 +47,7 @@ const tetrominoConfigs = [
         ]
     },
     {
+        key: "T",
         colour: "purple",
         shape: [
             [1, 1, 1],
@@ -50,6 +56,7 @@ const tetrominoConfigs = [
         ]
     },
     {
+        key: "I",
         colour: "teal",
         shape: [
             [0, 0, 0, 0],
@@ -66,12 +73,12 @@ export interface Tetromino {
     shape: Grid<number>
 }
 
-export const tetrominoes: Tetromino[] = tetrominoConfigs.map(({ shape, ...config }) => {
-    return {
+export const tetrominoes: Map<string, Tetromino> = new Map(tetrominoConfigs.map(({ shape, ...config }) => {
+    return [config.key, {
         ...config,
         shape: from2dArray(shape)
-    }
-})
+    }]
+}))
 
 export function generateRightRotation(tetromino: Tetromino) {
     const { rows, columns } = tetromino.shape;

@@ -1,6 +1,7 @@
 import { tetrominoes, Tetromino, generateRightRotation as rotateCellsRight, getKickOffsets } from "./tetromino";
 import Grid from "./grid";
 import { Position2D, Direction, addPositions, directionDeltas } from "./position";
+import { SevenBagGenerator } from "./tetromino-generator";
 
 function randomInt(n: number) {
   return Math.floor(Math.random() * n);
@@ -51,19 +52,6 @@ export class Field {
     }
 
     return collision;
-  }
-
-  spawnTetronimo(): RealTetromino {
-    const type = tetrominoes[randomInt(tetrominoes.length)];
-
-    return {
-      position: {
-        i: -1,
-        j: Math.floor((this.grid.columns - type.shape.columns) / 2)
-      },
-      rotation: 0,
-      type
-    }
   }
 
   move(next: RealTetromino, direction: Direction) {
@@ -119,7 +107,7 @@ export class Field {
     return tetromino;
   }
 
-  affixTetromino(tetromino: RealTetromino) {
+  affix(tetromino: RealTetromino) {
     for (const [tI, tJ] of tetromino.type.shape.keys(v => !!v)) {
       const i = tetromino.position.i + tI;
       const j = tetromino.position.j + tJ;
@@ -185,10 +173,28 @@ export class Field {
 export class Game {
   readonly field: Field;
   next: RealTetromino;
+  generator: SevenBagGenerator;
 
   constructor({ rows, columns }: GridConfig) {
     this.field = new Field({ rows, columns });
-    this.next = this.field.spawnTetronimo();
+
+    this.generator = new SevenBagGenerator([...tetrominoes.keys()])
+
+    this.next = this.spawnTetronimo();
+  }
+
+  spawnTetronimo(): RealTetromino {
+    const key = this.generator.take();
+    const type = tetrominoes.get(key)!;
+
+    return {
+      position: {
+        i: -1,
+        j: Math.floor((this.field.grid.columns - type.shape.columns) / 2)
+      },
+      rotation: 0,
+      type
+    }
   }
 
   attemptRotateRight() {
@@ -208,9 +214,9 @@ export class Game {
 
     if (!moved) {
       // landed
-      this.field.affixTetromino(this.next);
+      this.field.affix(this.next);
       this.field.clearCompletedRows();
-      this.next = this.field.spawnTetronimo();
+      this.next = this.spawnTetronimo();
     }
   }
 
