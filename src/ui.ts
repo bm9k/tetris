@@ -27,6 +27,11 @@ export function draw(game: Game, canvas: HTMLCanvasElement, cellSize: number) {
     drawBlock(context, {i, j}, value, cellSize);
   }
 
+  // draw ghost
+  for (const [i, j] of next.type.shape.keys(v => !!v)) {
+    drawBlock(context, addPositions(game.ghostPosition, {i, j}), next.type.colour, cellSize);
+  }
+
   // draw next tetromino
   for (const [i, j] of next.type.shape.keys(v => !!v)) {
     drawBlock(context, addPositions(next.position, {i, j}), next.type.colour, cellSize);

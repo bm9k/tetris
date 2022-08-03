@@ -172,7 +172,8 @@ export class Field {
 
 export class Game {
   readonly field: Field;
-  next: RealTetromino;
+  next!: RealTetromino;
+  ghostPosition!: Position2D;
   generator: SevenBagGenerator;
 
   constructor({ rows, columns }: GridConfig) {
@@ -180,14 +181,14 @@ export class Game {
 
     this.generator = new SevenBagGenerator([...tetrominoes.keys()])
 
-    this.next = this.spawnTetronimo();
+    this.spawnTetronimo();
   }
 
-  spawnTetronimo(): RealTetromino {
+  spawnTetronimo() {
     const key = this.generator.take();
     const type = tetrominoes.get(key)!;
 
-    return {
+    this.next = {
       position: {
         i: -1,
         j: Math.floor((this.field.grid.columns - type.shape.columns) / 2)
@@ -195,6 +196,12 @@ export class Game {
       rotation: 0,
       type
     }
+
+    this.alignGhost();
+  }
+
+  alignGhost() {
+    this.ghostPosition = this.calculateLockPosition();
   }
 
   attemptRotateRight() {
@@ -202,11 +209,13 @@ export class Game {
 
     if (!this.field.hasTetrominoCollided(potentialNext)) {
       this.next = potentialNext
+      this.alignGhost();
     }
   }
 
   attemptMove(direction: Direction) {
     this.field.move(this.next, direction);
+    this.alignGhost();
   }
 
   applyGravity() {
@@ -216,15 +225,16 @@ export class Game {
       // landed
       this.field.affix(this.next);
       this.field.clearCompletedRows();
-      this.next = this.spawnTetronimo();
+      this.spawnTetronimo();
     }
   }
 
-  hardDrop() {
-    // 1. find closest lock position
+  calculateLockPosition(): Position2D {
+    // find closest lock position
     // start from di = 1, 2, ... until the position isn't valid, then subtract 1
     let dI;
-    for (dI = 1; dI < this.field.grid.rows; dI++) {
+    // +1 accounts for tetrominoes spawning at i=-1
+    for (dI = 1; dI < this.field.grid.rows + 1; dI++) {
       const potential = {
         ...this.next,
         position: addPositions(this.next.position, { i: dI, j: 0 })
@@ -238,14 +248,15 @@ export class Game {
       }
     }
 
-    if (dI === 0) {
-      return;
-    }
+    return addPositions(this.next.position, { i: dI, j: 0 })
+  }
 
-    // 2. move the tetromino there
+  hardDrop() {
+    const position = this.calculateLockPosition();
+
     this.next = {
       ...this.next,
-      position: addPositions(this.next.position, { i: dI, j: 0 })
+      position,
     }
   }
 
