@@ -3,10 +3,6 @@ import Grid from "./grid";
 import { Position2D, Direction, addPositions, directionDeltas } from "./position";
 import { SevenBagGenerator } from "./tetromino-generator";
 
-function randomInt(n: number) {
-  return Math.floor(Math.random() * n);
-}
-
 export interface RealTetromino {
   position: Position2D
   rotation: number,  // 0 <= number <= 3

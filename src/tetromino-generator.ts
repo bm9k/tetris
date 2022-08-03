@@ -30,7 +30,7 @@ export class SevenBagGenerator {
     shuffle(this.bag);
   }
 
-  peak() {
+  peek() {
     return this.bag[this.next];
   }
 
