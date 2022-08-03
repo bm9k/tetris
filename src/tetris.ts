@@ -2,32 +2,7 @@ import hotkeys from "hotkeys-js";
 
 import { Game } from "./game";
 import { Direction } from "./position";
-
-// TODO: encapsulate UI
-function draw(game: Game, canvas: HTMLCanvasElement, cellSize: number) {
-  const { field, next } = game;
-
-  const context = canvas.getContext("2d")!;
-  context.clearRect(0, 0, canvas.width, canvas.height);
-
-  // draw field
-  for (const [i, j, value] of field.grid.entries(v => !!v)) {
-    // draw cell
-    context.fillStyle = value;
-    context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-  }
-
-  // draw next tetromino
-  context.fillStyle = next.type.colour;
-
-  for (const [tI, tJ] of next.type.shape.keys(v => !!v)) {
-    const i = next.position.i + tI;
-    const j = next.position.j + tJ;
-
-    // draw cell
-    context.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
-  }
-}
+import { draw } from "./ui";
 
 
 export default function setupTetris(domId: string) {

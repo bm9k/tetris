@@ -46,3 +46,6 @@ Tetris game in vanilla TS & HTML5 canvas ✨
 - [ ] Readme
 - [ ] Github pages demo
 - [ ] Formatting (prettier/eslint?)
+- [] Graphics
+  - [x] Basic bevel
+  - [ ] Basic styling (page/game)
