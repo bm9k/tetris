@@ -118,6 +118,48 @@ export class Field {
     // rotation rejected
     return tetromino;
   }
+
+  affixTetromino(tetromino: RealTetromino) {
+    for (const [tI, tJ] of tetromino.type.shape.keys(v => !!v)) {
+      const i = tetromino.position.i + tI;
+      const j = tetromino.position.j + tJ;
+
+      this.grid.cells[i][j] = tetromino.type.colour;
+    }
+  }
+
+  isRowCompleted(rowIndex: number) {
+    for (const cell of this.grid.cells[rowIndex]) {
+      if (!cell) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  findCompletedRows() {
+    const completedRows = [];
+
+    for (let i = this.grid.rows - 1; i >= 0; i--) {
+      if (this.isRowCompleted(i)) {
+        completedRows.push(i);
+      }
+    }
+
+    return completedRows;
+  }
+
+  clearCompletedRows() {
+    // identify completed rows
+    const completedRows = this.findCompletedRows();
+
+    for (const i of completedRows) {
+      for (let j = 0; j < this.grid.columns; j++) {
+        this.grid.cells[i][j] = "";
+      }
+    }
+  }
 }
 
 export class Game {
@@ -146,16 +188,8 @@ export class Game {
 
     if (!moved) {
       // landed
-
-      // 1. add to field
-      for (const [tI, tJ] of this.next.type.shape.keys(v => !!v)) {
-        const i = this.next.position.i + tI;
-        const j = this.next.position.j + tJ;
-
-        this.field.grid.cells[i][j] = this.next.type.colour;
-      }
-
-      // 2. spawn new tetromino
+      this.field.affixTetromino(this.next);
+      this.field.clearCompletedRows();
       this.next = this.field.spawnTetronimo();
     }
   }
@@ -187,7 +221,6 @@ export class Game {
       ...this.next,
       position: addPositions(this.next.position, { i: dI, j: 0 })
     }
-
   }
 
 

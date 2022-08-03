@@ -35,6 +35,9 @@ Tetris game in vanilla TS & HTML5 canvas ✨
       - [x] Soft drop
       - [x] Hard drop
   - [ ] Clear completed lines
+      - [x] Triggered when gravity is applied and tetromino can't move down
+      - [x] Clear completed lines
+      - [ ] Drop stack down
   - [ ] Game over check (when tetromino can't enter field)
   - [ ] Preview next tetromino
   - [ ] Levels of increasing speed
