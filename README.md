@@ -6,6 +6,9 @@ Tetris game in vanilla TS & HTML5 canvas ✨
 
 ## Overview
 
+## Demo
+Checkout the [live demo](https://bm9k.github.io/tetris)
+
 ## TODO
 - [x] Setup basic grid & add randomly colour cells
 - [x] Structure
@@ -44,8 +47,10 @@ Tetris game in vanilla TS & HTML5 canvas ✨
   - [ ] Scoring based upon number of lines clear & acceleration
   - [ ] Stats
 - [ ] Readme
-- [ ] Github pages demo
+- [x] Github pages demo
+  - [x] Deploy script
+  - [ ] Github banner/corner
+  - [ ] Make it look nice
 - [ ] Formatting (prettier/eslint?)
-- [] Graphics
+- [ ] Graphics
   - [x] Basic bevel
-  - [ ] Basic styling (page/game)
