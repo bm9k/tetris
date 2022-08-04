@@ -132,7 +132,8 @@ export class Field extends Grid<string> {
     return completedRows;
   }
 
-  clearCompletedRows(): boolean {
+  // clears completed rows & returns how many were cleared
+  clearCompletedRows(): (0 | 1 | 2 | 3 | 4) {
     // identify completed rows
     const completedRows = this.findCompletedRows();
 
@@ -144,7 +145,7 @@ export class Field extends Grid<string> {
     }
 
     if (!completedRows) {
-      return false;
+      return 0;
     }
 
     // drop field down
@@ -160,7 +161,45 @@ export class Field extends Grid<string> {
       this.cells[i] = row;
     }
 
-    return true;
+    return completedRows.length as (1 | 2 | 3 | 4);
+  }
+}
+
+class ScoreBoard {
+  readonly SOFT_DROP_CELL = 1;
+  readonly HARD_DROP_CELL = 2;
+  readonly LINES_CLEARED = {
+    1: 100,
+    2: 300,
+    3: 500,
+    4: 800
+  };
+
+  private _score: number = 0;
+
+  constructor() { }
+
+  get score() {
+    return this._score;
+  }
+
+  reset() {
+    this._score = 0;
+  }
+
+  addSoftDrop() {
+    this._score += this.SOFT_DROP_CELL;
+  }
+
+  addHardDrop(distance: number) {
+    this._score += this.HARD_DROP_CELL * distance;
+  }
+
+  addLinesCleared(lineCount: 0 | 1 | 2 | 3 | 4) {
+    if (lineCount === 0) {
+      return;
+    }
+    this._score += this.LINES_CLEARED[lineCount];
   }
 }
 
@@ -172,9 +211,11 @@ export class Game {
   holdAllowed: boolean = true;
   generator: SevenBagGenerator;
   gameOver: boolean = false;
+  score: ScoreBoard;
 
   constructor({ rows, columns }: GridConfig) {
     this.field = new Field({ rows, columns });
+    this.score = new ScoreBoard();
 
     this.generator = new SevenBagGenerator([...tetrominoes.keys()])
 
@@ -234,8 +275,12 @@ export class Game {
   }
 
   attemptMove(direction: Direction) {
-    this.field.move(this.next, direction);
+    const moved = this.field.move(this.next, direction);
     this.alignGhost();
+
+    if (direction === Direction.Down && moved) {
+      this.score.addSoftDrop();
+    }
   }
 
   applyGravity() {
@@ -250,7 +295,8 @@ export class Game {
 
       // landed
       this.field.affix(this.next);
-      this.field.clearCompletedRows();
+      const cleared = this.field.clearCompletedRows();
+      this.score.addLinesCleared(cleared);
 
       this.holdAllowed = true;
       this.spawnTetronimo();
@@ -282,10 +328,14 @@ export class Game {
   hardDrop() {
     const position = this.calculateLockPosition();
 
+    const dI = position.i - this.next.position.i;
+
     this.next = {
       ...this.next,
       position,
     }
+
+    this.score.addHardDrop(dI);
   }
 
 

@@ -18,48 +18,65 @@ const BEVEL_COLOURS = [
 const GHOST_OPACITY = .33;
 const TETROMINO_OPACITY = 1;
 
+export type CanvasWidgets = {
+  field: HTMLCanvasElement,
+  preview: HTMLCanvasElement,
+  hold: HTMLCanvasElement,
+}
 
-export function draw(game: Game, canvas: HTMLCanvasElement, previewCanvas: HTMLCanvasElement, holdCanvas: HTMLCanvasElement, cellSize: number) {
+export type Widgets = CanvasWidgets & {
+  root: HTMLDivElement,
+  score: HTMLSpanElement
+}
+
+export function draw(game: Game, elements: Widgets, cellSize: number) {
   const { field, next } = game;
 
-  const context = canvas.getContext("2d")!;
-  context.clearRect(0, 0, canvas.width, canvas.height);
+  const canvases: (keyof CanvasWidgets)[] = ["field", "preview", "hold"];
+  const contexts = canvases.reduce((contexts, widgetName) => {
+    const element = elements[widgetName];
+    const context = element.getContext("2d")!;
 
-  const previewContext = previewCanvas.getContext("2d")!;
-  previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    context.clearRect(0, 0, element.width, element.height);
 
-  const holdContext = holdCanvas.getContext("2d")!;
-  holdContext.clearRect(0, 0, holdCanvas.width, holdCanvas.height);
+    contexts[widgetName] = context;
+    return contexts;
+  }, {} as Record<keyof CanvasWidgets, CanvasRenderingContext2D>);
+
+  // TODO: these probably should be split into separate functions, but they're ok all in here at the moment because the code is still quite readable
 
   // draw field
   for (const [i, j, value] of field.entries(v => !!v)) {
-    drawBlock(context, { i, j }, value, cellSize);
+    drawBlock(contexts.field, { i, j }, value, cellSize);
   }
 
   // draw ghost
-  context.globalAlpha = GHOST_OPACITY;
+  contexts.field.globalAlpha = GHOST_OPACITY;
   for (const [i, j] of next.type.shape.keys(v => !!v)) {
-    drawBlock(context, addPositions(game.ghostPosition, { i, j }), next.type.colour, cellSize);
+    drawBlock(contexts.field, addPositions(game.ghostPosition, { i, j }), next.type.colour, cellSize);
   }
-  context.globalAlpha = TETROMINO_OPACITY;
+  contexts.field.globalAlpha = TETROMINO_OPACITY;
 
   // draw next tetromino
   for (const [i, j] of next.type.shape.keys(v => !!v)) {
-    drawBlock(context, addPositions(next.position, { i, j }), next.type.colour, cellSize);
+    drawBlock(contexts.field, addPositions(next.position, { i, j }), next.type.colour, cellSize);
   }
 
   // draw preview
   const preview = game.previewTetromino()
   for (const [i, j] of preview.shape.keys(v => !!v)) {
-    drawBlock(previewContext, addPositions({ i: 0, j: 0 }, { i, j }), preview.colour, cellSize);
+    drawBlock(contexts.preview, addPositions({ i: 0, j: 0 }, { i, j }), preview.colour, cellSize);
   }
 
   // draw held piece
   if (game.activeHold) {
     for (const [i, j] of game.activeHold.shape.keys(v => !!v)) {
-      drawBlock(holdContext, addPositions({ i: 0, j: 0 }, { i, j }), game.activeHold.colour, cellSize);
+      drawBlock(contexts.hold, addPositions({ i: 0, j: 0 }, { i, j }), game.activeHold.colour, cellSize);
     }
   }
+
+  // update score
+  elements.score.innerHTML = `${game.score.score}`;
 }
 
 export function drawBlock(context: CanvasRenderingContext2D, { i, j }: Position2D, colour: string, cellSize: number) {

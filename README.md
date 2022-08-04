@@ -59,9 +59,9 @@ Checkout the [live demo](https://bm9k.github.io/tetris)
       - [x] Spawns new piece (if nothing was held)
       - [x] Resets previously held piece to top (as if newly spawned)
       - [x] Can't use hold again until piece locks
+  - [x] Scoring based upon number of lines clear & acceleration
   - [ ] Load/save
   - [ ] Levels of increasing speed
-  - [ ] Scoring based upon number of lines clear & acceleration
   - [ ] Stats
 - [ ] Readme
 - [x] Github pages demo

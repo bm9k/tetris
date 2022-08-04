@@ -2,11 +2,10 @@ import hotkeys from "hotkeys-js";
 
 import { Game } from "./game";
 import { Direction } from "./position";
-import { draw } from "./ui";
-
+import { draw, CanvasWidgets, Widgets } from "./ui";
 
 export default function setupTetris(domId: string) {
-  const cellSize = 40;;
+  const cellSize = 40;
 
   const createGame = () => {
     return new Game({
@@ -23,23 +22,29 @@ export default function setupTetris(domId: string) {
   }
 
   const rootElement = document.getElementById(domId)!;
-  const canvas = rootElement.querySelector(".field") as HTMLCanvasElement;
-  const previewCanvas = rootElement.querySelector(".preview canvas") as HTMLCanvasElement;
-  const holdCanvas = rootElement.querySelector(".hold canvas") as HTMLCanvasElement;
 
-  // const canvas = document.getElementById(domId) as HTMLCanvasElement;
+  const elements: Widgets = {
+    root: rootElement as HTMLDivElement,
+    field: rootElement.querySelector(".field")!,
+    preview: rootElement.querySelector(".preview canvas")!,
+    hold: rootElement.querySelector(".hold canvas")!,
+    score: rootElement.querySelector(".score-value")!
+  }
+  
+  const canvasSizes: Record<keyof CanvasWidgets, {rows: number, columns: number}> = {
+    field: game.field,
+    preview: previewSize,
+    hold: previewSize
+  }
 
-  canvas.width = cellSize * game.field.columns;
-  canvas.height = cellSize * game.field.rows;
-
-  previewCanvas.width = cellSize * previewSize.columns;
-  previewCanvas.height = cellSize * previewSize.rows;
-
-  holdCanvas.width = cellSize * previewSize.columns;
-  holdCanvas.height = cellSize * previewSize.rows;
+  for (const [widgetName, size] of Object.entries(canvasSizes)) {
+    const element = elements[widgetName as keyof CanvasWidgets];
+    element.width = cellSize * size.columns;
+    element.height = cellSize * size.rows;
+  }
 
   const redraw = () => {
-    draw(game, canvas, previewCanvas, holdCanvas, cellSize);
+    draw(game, elements, cellSize);
   }
 
   setInterval(() => {
