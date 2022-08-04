@@ -4,17 +4,13 @@ import { rotateCoordinateRight } from "./position"
 type Bit = 1 | 0;
 
 type Tuple<TItem, TLength extends number> = [TItem, ...TItem[]] & { length: TLength };
-
-// TODO: is there any to simplify this?
-type Tuple2_2D<T> = Tuple<Tuple<T, 2>, 2>
-type Tuple3_2D<T> = Tuple<Tuple<T, 3>, 3>
-type Tuple4_2D<T> = Tuple<Tuple<T, 4>, 4>
+type Tuple_2D<Type, Size extends number> = Tuple<Tuple<Type, Size>, Size>
 
 type TetrominoConfig = {
     key: string,
     colour: string,
     // shape must be a square tuple of size 2, 3, or 4
-    shape: Tuple2_2D<Bit> | Tuple3_2D<Bit> | Tuple4_2D<Bit>
+    shape: Tuple_2D<Bit, (2 | 3 | 4)>
 }
 
 const tetrominoConfigs: TetrominoConfig[] = [
