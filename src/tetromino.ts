@@ -1,7 +1,23 @@
 import Grid, { from2dArray } from "./grid"
 import { rotateCoordinateRight } from "./position"
 
-const tetrominoConfigs = [
+type Bit = 1 | 0;
+
+type Tuple<TItem, TLength extends number> = [TItem, ...TItem[]] & { length: TLength };
+
+// TODO: is there any to simplify this?
+type Tuple2_2D<T> = Tuple<Tuple<T, 2>, 2>
+type Tuple3_2D<T> = Tuple<Tuple<T, 3>, 3>
+type Tuple4_2D<T> = Tuple<Tuple<T, 4>, 4>
+
+type TetrominoConfig = {
+    key: string,
+    colour: string,
+    // shape must be a square tuple of size 2, 3, or 4
+    shape: Tuple2_2D<Bit> | Tuple3_2D<Bit> | Tuple4_2D<Bit>
+}
+
+const tetrominoConfigs: TetrominoConfig[] = [
     {
         key: "O",
         colour: "gold",
@@ -71,7 +87,7 @@ const tetrominoConfigs = [
 export interface Tetromino {
     key: string,
     colour: string,
-    shape: Grid<number>
+    shape: Grid<Bit>
 }
 
 export const tetrominoes: Map<string, Tetromino> = new Map(tetrominoConfigs.map(({ shape, ...config }) => {
@@ -88,7 +104,7 @@ export function generateRightRotation(tetromino: Tetromino) {
         throw new Error("Tetromino geometries must be represented as a square 2d matrix")
     }
 
-    const rotatedShape = new Grid(rows, rows, 0);
+    const rotatedShape: Grid<Bit> = new Grid(rows, rows, 0);
 
     for (const [i, j, value] of tetromino.shape.entries()) {
         const { i: i2, j: j2 } = rotateCoordinateRight({ i, j }, rows);
