@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/tetris/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tetris</title>
+  <script type="module" crossorigin src="/tetris/assets/index.726568b1.js"></script>
+  <link rel="stylesheet" href="/tetris/assets/index.d87f08ec.css">
+</head>
+
+<body>
+  <div id="app">
+    <div id="tetris">
+      <div class="hold">
+        <h3>Hold</h3>
+        <canvas></canvas>
+      </div>
+      <div class="preview">
+        <h3>Next</h3>
+        <canvas></canvas>
+      </div>
+      <canvas class="field"></canvas>
+      <div class="score">
+        <h3>Score: <span class="score-value">0</span></h3>
+      </div>
+      <div class="controls">
+        <h3>Controls</h3>
+        <ul style="display: inline-block; text-align: left">
+          <li>Up Arrow: Rotate</li>
+          <li>Left/Right Arrow: Move left/right</li>
+          <li>Down Arrow: Move down</li>
+          <li>Spacebar: Drop instantly</li>
+          <li>H: Hold piece</li>
+          <li>N: New game</li>
+          <li>P: Pause <em>(not yet implemented)</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+</body>
+
+</html>
